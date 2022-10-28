@@ -10,10 +10,12 @@ export type TodolistPropsType = {
     title: string
     tasks: Array<TasksType>
     removeTask: (id: string) => void
-    changeFilter: (value: FilterValuesType) => void
+    changeFilter: (value: FilterValuesType, todolistID: string) => void
     addTask: (title: string) => void
     changeTaskStatus: (taskId: string, isDone: boolean) => void
     filter: FilterValuesType
+    id: string
+
 
 }
 
@@ -28,8 +30,7 @@ export const Todolist = (props: TodolistPropsType) => {
     const onKeyDownHandler = (e: KeyboardEvent<HTMLElement>) => {
         setError(null)
         if (e.key === "Enter") {
-            props.addTask(newTaskTitle);
-            setNewTaskTitle('')
+            addTask()
         }
     }
     const addTask = () => {
@@ -42,9 +43,9 @@ export const Todolist = (props: TodolistPropsType) => {
 
     }
 
-    const mainChangeFilterHandler = (filterValue: FilterValuesType) => {
-        props.changeFilter(filterValue)
-    }
+    // const mainChangeFilterHandler = (filterValue: FilterValuesType,tlID:string) => {
+    //     props.changeFilter(filterValue,tlID)
+    // }
 
 
     return (
@@ -80,13 +81,13 @@ export const Todolist = (props: TodolistPropsType) => {
             </ul>
             <div>
                 <button className={props.filter === "all" ? "active-filter" : ""}
-                        onClick={() => mainChangeFilterHandler('all')}>All
+                        onClick={() => props.changeFilter('all', props.id)}>All
                 </button>
                 <button className={props.filter === "active" ? "active-filter" : ""}
-                        onClick={() => mainChangeFilterHandler("active")}>Active
+                        onClick={() => props.changeFilter("active", props.id)}>Active
                 </button>
                 <button className={props.filter === "completed" ? "active-filter" : ""}
-                        onClick={() => mainChangeFilterHandler("completed")}>Completed
+                        onClick={() => props.changeFilter("completed", props.id)}>Completed
                 </button>
             </div>
         </div>
