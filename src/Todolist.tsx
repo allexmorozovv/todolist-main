@@ -1,5 +1,6 @@
-import React, {KeyboardEvent, ChangeEvent, useState} from "react";
+import React, {ChangeEvent} from "react";
 import {FilterValuesType} from "./App";
+import {AddItemForm} from "./AddItemForm";
 
 export type TasksType = {
     id: string
@@ -15,55 +16,31 @@ export type TodolistPropsType = {
     changeTaskStatus: (taskId: string, isDone: boolean, todolistId: string) => void
     filter: FilterValuesType
     id: string
-    removeTodolist:(todolistId:string)=>void
+    removeTodolist: (todolistId: string) => void
 
 
 }
 
 export const Todolist = (props: TodolistPropsType) => {
-    const [newTaskTitle, setNewTaskTitle] = useState("")
-    const [error, setError] = useState<null | string>(null)
 
-
-    const onNewTaskChangeHandler = (e: ChangeEvent<HTMLInputElement>) => {
-        setNewTaskTitle(e.currentTarget.value)
-    }
-    const onKeyDownHandler = (e: KeyboardEvent<HTMLElement>) => {
-        setError(null)
-        if (e.key === "Enter") {
-            addTask()
-        }
-    }
-    const addTask = () => {
-        if (newTaskTitle.trim() !== "") {
-            props.addTask(newTaskTitle.trim(), props.id);
-            setNewTaskTitle("")
-        } else {
-            setError("Field is required")
-        }
-
-    }
     const removeTodolistHandler = () => {
-       props.removeTodolist(props.id)
+        props.removeTodolist(props.id)
     }
 
     // const mainChangeFilterHandler = (filterValue: FilterValuesType,tlID:string) => {
     //     props.changeFilter(filterValue,tlID)
     // }
 
-
+    const addTask = (title: string) => {
+        props.addTask(title, props.id)
+    }
     return (
         <div>
-            <h3>{props.title} <button onClick={removeTodolistHandler}>remove todolist </button></h3>
+            <h3>{props.title}
+                <button onClick={removeTodolistHandler}>remove todolist</button>
+            </h3>
 
-            <div>
-                <input value={newTaskTitle}
-                       onChange={onNewTaskChangeHandler}
-                       onKeyDown={onKeyDownHandler}
-                       className={error ? "error" : ""}/>
-                <button onClick={addTask}>+</button>
-                {error && <div className={"error-message"}>{error}</div>}
-            </div>
+            <AddItemForm addItem={addTask}/>
             <ul>
                 {
                     props.tasks.map(t => {
