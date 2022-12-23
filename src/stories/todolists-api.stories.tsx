@@ -1,24 +1,16 @@
 import React, {useEffect, useState} from 'react'
-import axios from "axios";
+import {todolistAPI} from "../api/todolistAPI";
 
 export default {
     title: 'API'
 }
 
-const settings = {
-    withCredentials: true,
-    headers: {
-        'API-KEY': 'cfe8e7cb-ed3e-444f-8a33-4dd3fa'
-    }
-}
-export const GetTodolists = () => {
+export const GetTodoLists = () => {
     const [state, setState] = useState<any>(null)
     useEffect(() => {
-        axios.get('https://social-network.samuraijs.com/api/1.1/todo-lists', settings)
-            .then((res) => {
-                setState(res.data)
-            }).catch((e) => {
-            console.log(e)
+        const promise = todolistAPI.getTodoLists()
+        promise.then((res) => {
+            setState(res.data)
         })
 
     }, [])
@@ -27,8 +19,7 @@ export const GetTodolists = () => {
 export const CreateTodolist = () => {
     const [state, setState] = useState<any>(null)
     useEffect(() => {
-        const data = {title: 'Poc'}
-        axios.post('https://social-network.samuraijs.com/api/1.1/todo-lists', data, settings)
+        todolistAPI.createTodolist('tutu')
             .then((res) => {
                 setState(res.data)
             })
@@ -38,10 +29,9 @@ export const CreateTodolist = () => {
 }
 export const DeleteTodolist = () => {
     const [state, setState] = useState<any>(null)
-
     useEffect(() => {
-        const todolistId = 'b74b0c7a-7948-4587-b36e-5095c0289dee'
-        axios.delete(`https://social-network.samuraijs.com/api/1.1/todo-lists/${todolistId}`, settings)
+        const data = "b4c65ed7-8e99-49ad-b44f-d768d2df3c7c"
+        todolistAPI.deleteTodolist(data)
             .then((res) => {
                 setState(res.data)
             })
@@ -52,13 +42,9 @@ export const DeleteTodolist = () => {
 export const UpdateTodolistTitle = () => {
     const [state, setState] = useState<any>(null)
     useEffect(() => {
-
-        const todolistId = '6b826914-84d4-4f59-8c6d-966409b4801d'
-        const data = {
-            title:'Ty'
-        }
-        axios.put(`https://social-network.samuraijs.com/api/1.1/todo-lists/${todolistId}`, data, settings)
-            .then((res)=>{
+        const todolistId = "8b70c1eb-d484-40fc-8f27-578ca210ac85"
+        todolistAPI.updateTodolist(todolistId,'EEEEEEEEE')
+            .then((res) => {
                 setState(res.data)
             })
     }, [])
